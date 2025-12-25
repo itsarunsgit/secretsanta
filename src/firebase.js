@@ -4,6 +4,7 @@
   // Add individual products you need (e.g., Auth, Database)
   import { getAuth } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
   import { getDatabase } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
   // Your Firebase config
   const firebaseConfig = {
