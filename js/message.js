@@ -1,7 +1,5 @@
 let employees = [];
 
-import { saveMessageFS } from './firebase-utils.js';
-
 document.addEventListener('DOMContentLoaded', async () => {
   employees = await loadEmployees();
   

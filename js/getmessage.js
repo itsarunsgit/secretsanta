@@ -1,5 +1,3 @@
-import { getMessagesForEmployeeFS } from './firebase-utils.js';
-
 let employees = [];
 let currentEmployeeName = '';
 let messageTimers = [];
