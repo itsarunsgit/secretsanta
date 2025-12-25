@@ -10,7 +10,7 @@ import {
   query,
   where,
   serverTimestamp
-} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
 
 // Save assignment: { name, assignedTo }
 export async function saveAssignmentFS(name, assignedTo) {
