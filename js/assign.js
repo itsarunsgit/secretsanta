@@ -5,12 +5,8 @@ let currentEmployeeName = '';
 document.addEventListener('DOMContentLoaded', async () => {
   employees = await loadEmployees();
 
-  // Check if already assigned in URL params
-  const urlParams = new URLSearchParams(window.location.search);
-  const name = urlParams.get('name');
-  if (name) {
-    showAssignment(name);
-  }
+  // Note: We no longer show existing assignments from URL params
+  // Each time an employee visits, they get a new random assignment
 
   document.getElementById('nameForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -34,34 +30,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Use the actual employee name from the list for consistency
     const actualEmployeeName = employee.name;
 
-    // Check if already assigned
-    let existingAssignment;
-    try {
-      existingAssignment = await getAssignmentFS(actualEmployeeName);
-    } catch (error) {
-      console.error('Error fetching assignment:', error);
-      alert('Error checking assignment. Please try again.');
-      return;
-    }
-
-    if (existingAssignment) {
-      showAssignment(actualEmployeeName, existingAssignment);
-    } else {
-      // Create new assignment
-      createAssignment(actualEmployeeName);
-    }
+    // Always create a new assignment (different employee each time)
+    createAssignment(actualEmployeeName);
   });
 });
 
 async function createAssignment(employeeName) {
   // Get all other employees (excluding yourself)
-  const otherEmployees = employees.filter(emp => 
+  let otherEmployees = employees.filter(emp => 
     normalizeName(emp.name) !== normalizeName(employeeName)
   );
 
   if (otherEmployees.length === 0) {
     alert('No other employees available for assignment.');
     return;
+  }
+
+  // Try to avoid the previous assignment if it exists
+  try {
+    const previousAssignment = await getAssignmentFS(employeeName);
+    if (previousAssignment && otherEmployees.length > 1) {
+      // Filter out the previous assignment to get a different employee
+      otherEmployees = otherEmployees.filter(emp => 
+        normalizeName(emp.name) !== normalizeName(previousAssignment.assignedTo)
+      );
+      // If filtering left no employees, use all other employees
+      if (otherEmployees.length === 0) {
+        otherEmployees = employees.filter(emp => 
+          normalizeName(emp.name) !== normalizeName(employeeName)
+        );
+      }
+    }
+  } catch (error) {
+    console.error('Error checking previous assignment:', error);
+    // Continue with random selection if check fails
   }
 
   // Randomly select one from other employees
