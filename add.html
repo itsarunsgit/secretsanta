@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Participants - Secret Santa</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-green-50 p-6 min-h-screen">
+  <div class="max-w-lg mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold text-green-700 mb-4">🎅 Add Participants</h2>
+    <div id="groupInfo" class="mb-4 text-gray-700"></div>
+    <form id="addParticipantForm" class="space-y-2 mb-4">
+      <input type="text" id="participantName" placeholder="Name" required class="w-full border p-2 rounded">
+      <input type="email" id="participantEmail" placeholder="Email" required class="w-full border p-2 rounded">
+      <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">Add Participant</button>
+    </form>
+
+    <h3 class="text-xl font-semibold mb-2">Participants</h3>
+    <ul id="participantList" class="space-y-2"></ul>
+
+    <button id="generateSantaBtn" class="bg-red-600 text-white px-4 py-2 rounded mt-4 hover:bg-red-700 w-full">Generate Secret Santa 🎁</button>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/santa.js"></script>
+  <script src="js/add.js"></script>
+</body>
+</html>
