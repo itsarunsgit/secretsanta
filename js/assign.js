@@ -23,11 +23,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Check if employee exists
     const employee = employees.find(emp => 
-      console.log(normalizeName(emp.name)),
       normalizeName(emp.name) === normalizeName(employeeName)
     );
-    console.log(employees);
-    console.log(employee);
     if (!employee) {
       alert('Name not found in employee list. Please check your spelling.');
       return;
