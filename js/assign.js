@@ -1,9 +1,10 @@
+import { saveAssignmentFS, getAssignmentFS } from './firebase-utils.js';
 let employees = [];
 let currentEmployeeName = '';
 
 document.addEventListener('DOMContentLoaded', async () => {
   employees = await loadEmployees();
-  
+
   // Check if already assigned in URL params
   const urlParams = new URLSearchParams(window.location.search);
   const name = urlParams.get('name');
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.preventDefault();
     const nameInput = document.getElementById('employeeName');
     const employeeName = nameInput.value.trim();
-    
+
     if (!employeeName) {
       alert('Please enter your name');
       return;
@@ -31,9 +32,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Check if already assigned
-    const existingAssignment = getAssignment(employeeName);
+    const existingAssignment = await getAssignmentFS(employeeName);
     if (existingAssignment) {
-      showAssignment(employeeName);
+      showAssignment(employeeName, existingAssignment);
     } else {
       // Create new assignment
       createAssignment(employeeName);
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 });
 
-function createAssignment(employeeName) {
+async function createAssignment(employeeName) {
   // Get all other employees (excluding yourself)
   const otherEmployees = employees.filter(emp => 
     normalizeName(emp.name) !== normalizeName(employeeName)
@@ -56,17 +57,16 @@ function createAssignment(employeeName) {
   const shuffled = shuffleArray(otherEmployees);
   const assignedEmployee = shuffled[0];
 
-  // Save assignment
-  saveAssignment(employeeName, assignedEmployee.name);
-  
+  // Save assignment in Firestore
+  await saveAssignmentFS(employeeName, assignedEmployee.name);
+
   // Store current employee name
   localStorage.setItem('currentEmployee', employeeName);
-  
-  showAssignment(employeeName);
+
+  showAssignment(employeeName, { name: employeeName, assignedTo: assignedEmployee.name });
 }
 
-function showAssignment(employeeName) {
-  const assignment = getAssignment(employeeName);
+function showAssignment(employeeName, assignment) {
   if (!assignment) {
     alert('No assignment found. Please create one first.');
     return;
@@ -75,7 +75,7 @@ function showAssignment(employeeName) {
   document.getElementById('assignmentForm').classList.add('hidden');
   document.getElementById('assignmentResult').classList.remove('hidden');
   document.getElementById('assignedPerson').textContent = assignment.assignedTo;
-  
+
   // Store current employee name for message page
   localStorage.setItem('currentEmployee', employeeName);
 }

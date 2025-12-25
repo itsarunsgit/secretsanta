@@ -1,1 +1,29 @@
-{}
+{
+    "messages": [
+        {
+            "sender": "Arun",
+            "receiver": "Ansh",
+            "message": "Hello, how are you?"
+        },
+        {
+            "sender": "Ansh",
+            "receiver": "Arun",
+            "message": "I'm good, thank you!"
+        },
+        {
+            "sender": "Ram",
+            "receiver": "Haresh",
+            "message": "What are you doing?"
+        },
+        {
+            "sender": "Haresh",
+            "receiver": "Ram",
+            "message": "I'm doing nothing!"
+        },
+        {
+            "sender": "Saurav",
+            "receiver": "Arun",
+            "message": "What are you doing?"
+        }
+    ]
+}
