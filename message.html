@@ -65,9 +65,16 @@
     </div>
   </div>
 
+  <!-- Firebase core and Firestore v8 for browser compatibility -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <!-- Firebase config with db2 global -->
+  <script src="src/firebase.js"></script>
+  <!-- Firestore utility functions global -->
+  <script src="js/firebase-utils.js"></script>
+  <!-- Your app scripts -->
   <script src="js/employee-storage.js"></script>
   <script src="js/employee-utils.js"></script>
-  <script src="js/firebase-utils.js"></script>
   <script src="js/message.js"></script>
 </body>
 </html>
