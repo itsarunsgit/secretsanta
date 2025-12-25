@@ -1,3 +1,5 @@
+import { getMessagesForEmployeeFS } from './firebase-utils.js';
+
 let employees = [];
 let currentEmployeeName = '';
 let messageTimers = [];
@@ -35,9 +37,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 });
 
-function showMessages(employeeName) {
+async function showMessages(employeeName) {
   currentEmployeeName = employeeName;
-  const messages = getMessagesForEmployee(employeeName);
+  let messages = [];
+  try {
+    messages = await getMessagesForEmployeeFS(employeeName);
+  } catch (err) {
+    alert('Error loading messages from database.');
+    console.error(err);
+    messages = [];
+  }
 
   // Clear previous timers
   messageTimers.forEach(timer => clearInterval(timer));

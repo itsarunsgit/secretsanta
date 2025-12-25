@@ -1,5 +1,7 @@
 let employees = [];
 
+import { saveMessageFS } from './firebase-utils.js';
+
 document.addEventListener('DOMContentLoaded', async () => {
   employees = await loadEmployees();
   
@@ -37,12 +39,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    // Save message
-    saveMessage(senderName, assignment.assignedTo, messageText);
-
-    // Show success message
-    document.getElementById('messageForm').classList.add('hidden');
-    document.getElementById('messageSuccess').classList.remove('hidden');
+    // Save message to Firebase
+    try {
+      await saveMessageFS(senderName, assignment.assignedTo, messageText);
+      // Show success message
+      document.getElementById('messageForm').classList.add('hidden');
+      document.getElementById('messageSuccess').classList.remove('hidden');
+    } catch (err) {
+      alert('Error sending message. Please try again.');
+      console.error(err);
+    }
   });
 });
 
