@@ -35,37 +35,65 @@ function getAssignment(employeeName) {
 }
 
 // Save a message (from sender to receiver)
-function saveMessage(senderName, receiverName, message) {
-  const messages = getMessages();
-  if (!messages[receiverName.toLowerCase()]) {
-    messages[receiverName.toLowerCase()] = [];
+async function saveMessage(senderName, receiverName, message) {
+  try {
+    const response = await fetch('save_message.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        senderName,
+        receiverName,
+        message
+      })
+    });
+    const result = await response.json();
+    if (!result.success) {
+      console.error('Failed to save message');
+    }
+  } catch (error) {
+    console.error('Error saving message:', error);
   }
-  messages[receiverName.toLowerCase()].push({
-    from: senderName,
-    message: message,
-    timestamp: Date.now(),
-    revealed: false
-  });
-  localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
 }
 
 // Get all messages
-function getMessages() {
-  return JSON.parse(localStorage.getItem(MESSAGES_KEY)) || {};
+async function getMessages() {
+  try {
+    const response = await fetch('messages.json');
+    return await response.json();
+  } catch (error) {
+    console.error('Error loading messages:', error);
+    return {};
+  }
 }
 
 // Get messages for an employee
-function getMessagesForEmployee(employeeName) {
-  const messages = getMessages();
+async function getMessagesForEmployee(employeeName) {
+  const messages = await getMessages();
   return messages[employeeName.toLowerCase()] || [];
 }
 
 // Reveal sender name for a message (after 1 hour)
-function revealSender(employeeName, messageIndex) {
-  const messages = getMessages();
-  if (messages[employeeName.toLowerCase()] && messages[employeeName.toLowerCase()][messageIndex]) {
-    messages[employeeName.toLowerCase()][messageIndex].revealed = true;
-    localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
+async function revealSender(employeeName, messageIndex) {
+  try {
+    const response = await fetch('save_message.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        action: 'reveal',
+        employeeName,
+        messageIndex
+      })
+    });
+    const result = await response.json();
+    if (!result.success) {
+      console.error('Failed to reveal sender');
+    }
+  } catch (error) {
+    console.error('Error revealing sender:', error);
   }
 }
 
