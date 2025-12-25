@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    // Get assignment to find receiver
-    const assignment = getAssignment(senderName);
+    // Get assignment to find receiver from Firebase
+    const assignment = await getAssignmentFS(senderName);
     if (!assignment) {
       alert('You need to get your assignment first! Please go to the assignment page.');
       window.location.href = 'assign.html';
