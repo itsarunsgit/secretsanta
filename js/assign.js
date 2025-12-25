@@ -31,13 +31,24 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
+    // Use the actual employee name from the list for consistency
+    const actualEmployeeName = employee.name;
+
     // Check if already assigned
-    const existingAssignment = await getAssignmentFS(employeeName);
+    let existingAssignment;
+    try {
+      existingAssignment = await getAssignmentFS(actualEmployeeName);
+    } catch (error) {
+      console.error('Error fetching assignment:', error);
+      alert('Error checking assignment. Please try again.');
+      return;
+    }
+
     if (existingAssignment) {
-      showAssignment(employeeName, existingAssignment);
+      showAssignment(actualEmployeeName, existingAssignment);
     } else {
       // Create new assignment
-      createAssignment(employeeName);
+      createAssignment(actualEmployeeName);
     }
   });
 });
@@ -58,7 +69,13 @@ async function createAssignment(employeeName) {
   const assignedEmployee = shuffled[0];
 
   // Save assignment in Firestore
-  await saveAssignmentFS(employeeName, assignedEmployee.name);
+  try {
+    await saveAssignmentFS(employeeName, assignedEmployee.name);
+  } catch (error) {
+    console.error('Error saving assignment:', error);
+    alert('Error saving assignment. Please try again.');
+    return;
+  }
 
   // Store current employee name
   localStorage.setItem('currentEmployee', employeeName);
