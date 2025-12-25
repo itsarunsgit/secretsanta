@@ -1,4 +1,4 @@
-import { saveAssignmentFS, getAssignmentFS } from './firebase-utils.js';
+// saveAssignmentFS and getAssignmentFS are available globally via firebase-utils.js script include
 let employees = [];
 let currentEmployeeName = '';
 
