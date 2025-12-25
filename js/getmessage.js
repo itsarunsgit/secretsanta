@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const name = urlParams.get('name');
   if (name) {
-    await showMessages(name);
+    showMessages(name);
   }
 
-  document.getElementById('getNameForm').addEventListener('submit', async (e) => {
+  document.getElementById('getNameForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const employeeName = document.getElementById('employeeName').value.trim();
     
@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    await showMessages(employeeName);
+    showMessages(employeeName);
   });
 });
 
-async function showMessages(employeeName) {
+function showMessages(employeeName) {
   currentEmployeeName = employeeName;
-  const messages = await getMessagesForEmployee(employeeName);
+  const messages = getMessagesForEmployee(employeeName);
 
   // Clear previous timers
   messageTimers.forEach(timer => clearInterval(timer));
@@ -96,9 +96,9 @@ function createMessageCard(message, index) {
   // Add event listener for reveal button
   const revealBtn = card.querySelector('.reveal-btn');
   if (revealBtn) {
-    revealBtn.addEventListener('click', async () => {
-      await revealSender(currentEmployeeName, index);
-      await showMessages(currentEmployeeName); // Refresh to show revealed name
+    revealBtn.addEventListener('click', () => {
+      revealSender(currentEmployeeName, index);
+      showMessages(currentEmployeeName); // Refresh to show revealed name
     });
   }
 
@@ -106,8 +106,8 @@ function createMessageCard(message, index) {
 }
 
 function startRevealTimer(messageIndex) {
-  const timer = setInterval(async () => {
-    const messages = await getMessagesForEmployee(currentEmployeeName);
+  const timer = setInterval(() => {
+    const messages = getMessagesForEmployee(currentEmployeeName);
     const message = messages[messageIndex];
     
     if (!message) {
@@ -118,12 +118,11 @@ function startRevealTimer(messageIndex) {
     const canReveal = canRevealSender(message);
     const timeRemaining = getTimeUntilReveal(message);
     const timerElement = document.querySelector(`.timer-${messageIndex}`);
-    const cardElement = document.getElementById(`message-${messageIndex}`);
 
     if (canReveal && !message.revealed) {
       // Update card to show reveal button
       clearInterval(timer);
-      await showMessages(currentEmployeeName); // Refresh to show reveal button
+      showMessages(currentEmployeeName); // Refresh to show reveal button
     } else if (timerElement) {
       timerElement.textContent = formatTimeRemaining(timeRemaining);
     }

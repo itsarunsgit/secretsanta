@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Save message
-    await saveMessage(senderName, assignment.assignedTo, messageText);
+    saveMessage(senderName, assignment.assignedTo, messageText);
 
     // Show success message
     document.getElementById('messageForm').classList.add('hidden');
