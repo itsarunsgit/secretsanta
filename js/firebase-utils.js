@@ -20,8 +20,8 @@ window.getAssignmentFS = async function(name) {
 // Save a message: { from, to, message, timestamp, revealed }
 window.saveMessageFS = async function(from, to, message) {
   return await window.db2.collection('messages').add({
-    from,
-    to,
+    from: from.toLowerCase(),
+    to: to.toLowerCase(),
     message,
     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     revealed: false
@@ -30,6 +30,6 @@ window.saveMessageFS = async function(from, to, message) {
 
 // Get messages for a recipient (to: employeeName)
 window.getMessagesForEmployeeFS = async function(employeeName) {
-  const q = await window.db2.collection('messages').where('to', '==', employeeName).get();
+  const q = await window.db2.collection('messages').where('to', '==', employeeName.toLowerCase()).get();
   return q.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
